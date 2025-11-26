@@ -47,7 +47,7 @@ function App() {
       <Grid size={{ xs: 12, md: 12 }}><HeaderUI /></Grid>
 
       {/* Alertas */}
-      <Grid container justifyContent="right" alignItems="center"><AlertUI description="No se preveen lluvias" /></Grid>
+      <Grid size={{ xs: 12, md: 12 }} container justifyContent="right" alignItems="center"><AlertUI description="No se preveen lluvias" /></Grid>
 
       {/* Selector */}
       <Grid size={{ xs: 12, md: 3 }}>Elemento: Selector</Grid>
