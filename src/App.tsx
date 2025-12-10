@@ -8,10 +8,15 @@ import TableUI from './components/TableUI';
 import ChartUI from './components/ChartUI';
 
 import { Grid } from '@mui/material';
+import { useState } from 'react';
 
 function App() {
 
-  const dataFetcherOutput = useFetchData();
+  // Utilice una variable de estado para almacenar la opción seleccionada por el usuario
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+  // Comunique la opción seleccionada al hook useFetchData
+  const dataFetcherOutput = useFetchData(selectedOption);
 
   return (
     <Grid container spacing={5} justifyContent="center" alignItems="center">
@@ -20,10 +25,10 @@ function App() {
       <Grid size={12}><HeaderUI /></Grid>
 
       {/* Alertas */}
-      <Grid size={12} /*container justifyContent="right" alignItems="center"*/><AlertUI description="No se preveen lluvias" /></Grid>
+      <Grid size={12} /*container justifyContent="right" alignItems="center"*/><AlertUI data={dataFetcherOutput} /></Grid>
 
       {/* Selector */}
-      <Grid size={{ xs: 12, md: 3 }}><Selector></Selector></Grid>
+      <Grid size={{ xs: 12, md: 3 }}><Selector onOptionSelect={setSelectedOption}></Selector></Grid>
 
       {/* Indicadores */}
       <Grid size={{ xs: 12, md: 9 }} container>

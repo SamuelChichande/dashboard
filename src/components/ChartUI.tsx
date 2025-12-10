@@ -29,7 +29,7 @@ export default function ChartUI({ data }: ChartUIProps) {
     return (
         <>
             <Typography variant="h5" component="div">
-                Grafico vs Velocidad del viento & Temperatura
+                Tiempo vs Velocidad del viento (10m) & Temperatura (2m)
             </Typography>
             <LineChart
                 height={300}
