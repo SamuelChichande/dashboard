@@ -4,8 +4,12 @@ import AlertUI from './components/AlertUI';
 import Selector from './components/SelectorUI';
 import IndicatorUI from './components/IndicatorUI';
 import useFetchData from './functions/useFetchData';
+import { CITY_COORDS } from './functions/useFetchData';
 import TableUI from './components/TableUI';
 import ChartUI from './components/ChartUI';
+import MapUI from './components/MapUI';
+import useFetchDataDemographic from './functions/useFetchDataDemographic';
+import DemographicUI from './components/DemographicUI';
 
 import { Grid } from '@mui/material';
 import { useState } from 'react';
@@ -15,9 +19,28 @@ function App() {
   // Utilice una variable de estado para almacenar la opción seleccionada por el usuario
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
+  // Determine cityConfig from selectedOption (can be 'lat,lng' or city key)
+  let cityConfig = { latitude: -2.1962, longitude: -79.8862 };
+  if (selectedOption) {
+    if (selectedOption.includes(',')) {
+      const parts = selectedOption.split(',').map(s => parseFloat(s));
+      if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+        cityConfig = { latitude: parts[0], longitude: parts[1] };
+      }
+    } else {
+      const key = selectedOption.toLowerCase();
+      cityConfig = CITY_COORDS[key as keyof typeof CITY_COORDS] ?? CITY_COORDS['guayaquil'];
+    }
+  }
+
   // Comunique la opción seleccionada al hook useFetchData
   const dataFetcherOutput = useFetchData(selectedOption);
+  const dataFetcherOutputDemographic = useFetchDataDemographic(cityConfig);
 
+  const onCoordinatesSelect = (coords: string) => {
+    console.log('Coordenadas seleccionadas:', coords);
+    setSelectedOption(coords);
+  }
   return (
     <Grid container spacing={5} justifyContent="center" alignItems="center">
 
@@ -79,8 +102,8 @@ function App() {
       </Grid>
 
       {/* Información adicional */}
-      <Grid size={{ xs: 12, md: 12 }}>Elemento: Información adicional</Grid>
-
+      <Grid size={{ xs: 12, md: 6 }}><MapUI selectedOption={selectedOption} onCoordinatesSelect={onCoordinatesSelect}></MapUI></Grid>
+      <Grid size={{ xs: 12, md: 6 }}><DemographicUI data={dataFetcherOutputDemographic} /></Grid>
     </Grid>
   );
 }
